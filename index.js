@@ -6,8 +6,28 @@ const States = {
     Instructions: 2
 };
 
+const Directions = {
+    N: 0,
+    E: 1,
+    S: 2,
+    W: 3
+};
+//const Directions = ['N', 'E', 'S', 'W'];
+
 console.log(States);
 
+moveShip = (ship, instruction) => {
+    switch (instruction) {
+        case "R":
+            ship.direction = (ship.direction + 1) % 4;
+            break;
+        case "L":
+            ship.direction = (ship.direction - 1) % 4;
+            break;
+        case "F":
+            break;
+    }
+}
 processFile = (filename) => {
     let state = States.SeaSize;
     let maxX = 0, maxY = 0;
@@ -35,12 +55,17 @@ processFile = (filename) => {
                 ship = {
                     x: parseInt(data[0]),
                     y: parseInt(data[1]),
-                    direction: data[2]
+                    direction: Directions[data[2]]
                 };
 
                 state = States.Instructions;
                 break;
             case States.Instructions:
+                for (let i = 0; i < line.length; i++) {
+                    moveShip(ship, line.charAt(i));
+                }
+
+                state = States.StartPosition;
                 break;
         }
     });
