@@ -1,38 +1,13 @@
 const readline = require('linebyline');
+const Ship = require('./ship');
+const { States, Directions } = require('./constants');
 
-const States = {
-    SeaSize: 0,
-    StartPosition: 1,
-    Instructions: 2
-};
 
-const Directions = {
-    N: 0,
-    E: 1,
-    S: 2,
-    W: 3
-};
-//const Directions = ['N', 'E', 'S', 'W'];
-
-console.log(States);
-
-moveShip = (ship, instruction) => {
-    switch (instruction) {
-        case "R":
-            ship.direction = (ship.direction + 1) % 4;
-            break;
-        case "L":
-            ship.direction = (ship.direction - 1) % 4;
-            break;
-        case "F":
-            break;
-    }
-}
 processFile = (filename) => {
     let state = States.SeaSize;
     let maxX = 0, maxY = 0;
     let warnings = [];
-    let ship = {};
+    let ship;
 
     const rl = readline(filename);
     rl.on('line', (line, lineCount, byteCount) => {
@@ -52,17 +27,14 @@ processFile = (filename) => {
                 state = States.StartPosition;
                 break;
             case States.StartPosition:
-                ship = {
-                    x: parseInt(data[0]),
-                    y: parseInt(data[1]),
-                    direction: Directions[data[2]]
-                };
+                ship = new Ship(parseInt(data[0]), parseInt(data[1]), Directions[data[2]]);
+
 
                 state = States.Instructions;
                 break;
             case States.Instructions:
                 for (let i = 0; i < line.length; i++) {
-                    moveShip(ship, line.charAt(i));
+                    ship.move(line.charAt(i));
                 }
 
                 state = States.StartPosition;
