@@ -7,7 +7,7 @@ const seaInfo = require('./sea-info');
 processFile = (filename) => {
     let state = States.SeaSize;
     let ship;
-    seaInfo.warnings = [];
+    seaInfo.warnings = {};
 
     const rl = readline(filename);
     rl.on('line', (line, lineCount, byteCount) => {
@@ -35,7 +35,10 @@ processFile = (filename) => {
 
             case States.Instructions:
                 for (let i = 0; i < line.length; i++) {
-                    ship.move(line.charAt(i));
+                    if (ship.move(line.charAt(i)) == false) {
+                        state = States.Lost;
+                        return;
+                    };
                 }
 
                 state = States.StartPosition;

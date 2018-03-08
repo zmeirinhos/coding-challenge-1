@@ -13,8 +13,8 @@ class Ship {
     constructor(x, y, direction) {
         this.x = x;
         this.y = y;
-        console.log({x, y});
         this.direction = direction;
+        console.log(this)
     }
 
     move(instruction) {
@@ -26,19 +26,26 @@ class Ship {
                 this.direction = (this.direction - 1) % 4;
                 break;
             case "F":
-                let { direction } = this;
-                let { x, y } = moveForward[direction](this.x, this.y);
-                console.log({x, y});
-                this.x = x;
-                this.y = y;
+                if (seaInfo.warnings[this.x + ' ' + this.y] &&
+                    seaInfo.warnings[this.x + ' ' + this.y] === this.direction) {
+                    // That way lies the abyss, ignore!
+                    return;
+                }
+
+                let { x, y } = moveForward[this.direction](this.x, this.y);
 
                 if (x < 0 || x > seaInfo.maxX || y < 0 || y > seaInfo.maxY) {
+                    seaInfo.warnings[this.x + ' ' + this.y] = this.direction;
                     console.log('LOST');
+                    return false;
                 } else {
-
+                    this.x = x;
+                    this.y = y;
+                    console.log(this.x, this.y);
                 }
                 break;
         }
+        return true;
     };
 }
 

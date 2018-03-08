@@ -2,7 +2,8 @@
 const States = {
     SeaSize: 0,
     StartPosition: 1,
-    Instructions: 2
+    Instructions: 2,
+    Lost: 3
 };
 
 const Directions = {
@@ -11,6 +12,7 @@ const Directions = {
     S: 2,
     W: 3
 };
+
 
 module.exports = {
     States: States,
