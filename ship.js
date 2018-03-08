@@ -1,4 +1,5 @@
-const { States, Directions } = require('./constants');
+const seaInfo = require('./sea-info');
+
 
 const moveForward = [
     (x, y) => { return { x: x,   y: y+1 }; }, // North
@@ -16,10 +17,6 @@ class Ship {
         this.direction = direction;
     }
 
-    seaInfo(maxX, maxY, warnings) {
-
-    }
-
     move(instruction) {
         switch (instruction) {
             case "R":
@@ -31,7 +28,15 @@ class Ship {
             case "F":
                 let { direction } = this;
                 let { x, y } = moveForward[direction](this.x, this.y);
+                console.log({x, y});
+                this.x = x;
+                this.y = y;
 
+                if (x < 0 || x > seaInfo.maxX || y < 0 || y > seaInfo.maxY) {
+                    console.log('LOST');
+                } else {
+
+                }
                 break;
         }
     };
