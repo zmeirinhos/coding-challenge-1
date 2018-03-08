@@ -13,8 +13,10 @@ const Directions = {
     W: 3
 };
 
+const TextDirections = ['N', 'E', 'S', 'W'];
 
 module.exports = {
-    States: States,
-    Directions: Directions
+    States,
+    Directions,
+    TextDirections
 };

@@ -1,6 +1,6 @@
 const readline = require('linebyline');
 const Ship = require('./ship');
-const { States, Directions } = require('./constants');
+const { States, Directions, TextDirections } = require('./constants');
 const seaInfo = require('./sea-info');
 
 
@@ -12,9 +12,10 @@ processFile = (filename) => {
     const rl = readline(filename);
     rl.on('line', (line, lineCount, byteCount) => {
         line = line.trim();
-        console.log(line);
 
         if (line === '') { // New ship data
+            console.log(ship.x + ' ' + ship.y + ' ' + TextDirections[ship.direction] + (state === States.Lost ? ' LOST' : ''));
+
             state = States.StartPosition;
             return;
         }
@@ -35,13 +36,16 @@ processFile = (filename) => {
 
             case States.Instructions:
                 for (let i = 0; i < line.length; i++) {
-                    if (ship.move(line.charAt(i)) == false) {
+                    if (!ship.move(line.charAt(i))) {
                         state = States.Lost;
                         return;
                     };
                 }
 
                 state = States.StartPosition;
+                break;
+            case States.Lost:
+                // Ignore data
                 break;
         }
     });

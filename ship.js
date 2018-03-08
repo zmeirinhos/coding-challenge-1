@@ -14,34 +14,33 @@ class Ship {
         this.x = x;
         this.y = y;
         this.direction = direction;
-        console.log(this)
     }
 
+    /*
+     * Returns true if the ship is safe; false if it has been lost
+     */
     move(instruction) {
         switch (instruction) {
             case "R":
-                this.direction = (this.direction + 1) % 4;
+                this.direction = (this.direction + 1 + 4) % 4;
                 break;
             case "L":
-                this.direction = (this.direction - 1) % 4;
+                this.direction = (this.direction - 1 + 4) % 4;
                 break;
             case "F":
-                if (seaInfo.warnings[this.x + ' ' + this.y] &&
-                    seaInfo.warnings[this.x + ' ' + this.y] === this.direction) {
+                if (seaInfo.warnings[this.x + ' ' + this.y] === this.direction) {
                     // That way lies the abyss, ignore!
-                    return;
+                    return true;
                 }
 
                 let { x, y } = moveForward[this.direction](this.x, this.y);
 
                 if (x < 0 || x > seaInfo.maxX || y < 0 || y > seaInfo.maxY) {
                     seaInfo.warnings[this.x + ' ' + this.y] = this.direction;
-                    console.log('LOST');
                     return false;
                 } else {
                     this.x = x;
                     this.y = y;
-                    console.log(this.x, this.y);
                 }
                 break;
         }
